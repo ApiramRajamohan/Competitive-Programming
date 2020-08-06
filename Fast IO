@@ -1,0 +1,35 @@
+void fastscan(int &number) 
+{ 
+    bool negative = false; 
+    register int num; 
+  
+    number = 0; 
+  
+    
+    num = getchar(); 
+    if (num=='-') 
+    { 
+        
+        negative = true; 
+  
+
+        num = getchar(); 
+    } 
+  
+  
+    for (; (num>47 && num<58); num=getchar()) 
+        number = number *10 + num - 48; 
+  
+   
+    if (negative) 
+        number *= -1; 
+} 
+int main {
+int number ;
+fastscan(number);}
+
+/*ios_base::sync_with_stdio(false); 
+    cin.tie(NULL); */
+
+
+/* Useful Technique in Competitive Programming :) */
