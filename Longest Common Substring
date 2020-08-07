@@ -1,0 +1,21 @@
+int LCW(string u , string v){
+   int LC[slength+1][tlength+1];
+    
+    for (int i = 0 ; i<=slength ;i++){
+        for (int k = 0 ; k<=tlength ;k++){
+            if (i == 0 || k == 0) 
+                LC[i][k] = 0;
+                
+           else if (u[i-1] == v[i-1]) 
+            { 
+                LC[i][k] = LC[i-1][k-1] + 1; 
+                maxlcw = max(maxlcw, LC[i][k]); 
+            } 
+            else LC[i][k] = 0; 
+              
+                
+                }
+            }
+        
+        return maxlcw;
+    }
