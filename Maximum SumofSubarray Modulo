@@ -1,0 +1,19 @@
+long maximumSum(vector<long> a, long m) {
+    long sum=0;
+    long maxxy=0;
+    long finalvalue=0;
+    
+    set<long>S;
+    S.insert(m);
+    for (int i = 0 ; i<a.size();i++){
+        sum+=a[i];
+        sum=sum%m;
+        auto it = S.lower_bound(sum);
+        maxxy= *it;
+        finalvalue=max(finalvalue,(m+sum-maxxy)%m);
+        S.insert(sum);
+        S.insert(sum+m);
+
+    }
+    return finalvalue;}
+    
