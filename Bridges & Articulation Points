@@ -1,0 +1,85 @@
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+int n ,m;
+
+
+
+
+ 
+void dfs(int vertex, vector<vector<int> >& adj, vector<int>& disc, vector<int>& low,
+vector<bool>& visited, vector<bool>& AP,
+vector<pair<int, int> >& bridge, int parent){
+     static int time=1;
+disc[vertex] = low[vertex] = time++;
+int child=0;
+visited[vertex] = true;
+      for (auto& i: adj[vertex]){
+if (!visited[i]){
+child++;
+dfs(i, adj, disc, low, visited, AP, bridge, vertex);
+                                low[vertex] = min(low[vertex], low[i]);
+                                
+                           low[vertex] = min(low[vertex], low[i]);
+if (parent==-1 && child>1) AP[vertex] = true;
+else if (parent!=-1 && low[i]>=disc[vertex]) AP[vertex] = true;
+                        if (low[i]>disc[vertex])
+                   bridge.push_back({vertex, i});
+}
+                        else if (i != parent){
+                                low[vertex] = min(low[vertex], disc[i]);}}}
+
+
+int main() {
+cin>>n>>m;
+vector<vector<int>>arr(n);
+   vector<bool> visited(n, false);
+vector<bool> AP(n, false);
+vector<pair<int, int> > bridge;
+vector<int> disc(n, INT_MAX);
+vector<int> low(n, INT_MAX);
+  
+
+   
+for (int i=0;i<m;i++){
+    int k,b;
+    cin>>k>>b;
+  arr[k].push_back(b);
+  arr[b].push_back(k);
+}
+
+for (int i = 0 ;i<n;i++){
+        if (!visited[i])
+       dfs(i, arr, disc, low, visited, AP, bridge, -1);
+}
+
+vector<int>A;
+int counts=0;
+for (int i = 0 ; i<n;i++){
+    if (AP[i]){
+       counts++;
+    }
+}
+cout<<counts<<endl;
+for (int i = 0 ; i<n;i++){
+    if (AP[i]){
+       cout<<i<<" ";
+    }
+}
+sort(bridge.begin(),bridge.end());
+
+cout<<endl;
+ counts=0;
+for (auto x:bridge){
+    
+            counts++;}
+            cout<<counts<<endl;
+for (auto x:bridge){
+    if (x.first>x.second ){
+        cout<<x.second<<" "<<x.first<<endl;
+    }
+    else if ((x.second!=0 || x.first!=0)) cout<<x.first<<" "<<x.second<<endl;
+}
+}
