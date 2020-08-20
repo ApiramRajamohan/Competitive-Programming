@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+int n ,m;
+
+int odd=0,even=0;
+
+
+ 
+void dfs(int vertex, vector<vector<int> >& adj, vector<int>&disc, vector<int>& low,
+vector<bool>&visited, int parent,stack<pair<int,int>>&bi){
+   static int time =1;
+disc[vertex] = low[vertex] = time++;
+visited[vertex] = true;
+int child=0;
+int counts=0;
+for (auto& i: adj[vertex]){
+if (!visited[i]){
+child++;
+bi.push({vertex, i});
+dfs(i, adj,disc, low, visited,vertex ,bi);
+low[vertex] = min(low[vertex], low[i]);
+
+if ((parent==-1 && child>1 )||(parent!=-1 && low[i]>=disc[vertex])) {
+   
+    while (bi.top().first!=vertex && bi.top().second!=i){
+        bi.pop();
+    counts++;
+    }
+    bi.pop();
+    
+     if (counts&1)odd++;
+    else even++;
+}                   
+}
+                        else if (i != parent &&disc[i]<low[vertex]){
+                                low[vertex] = min(low[vertex], disc[i]);
+                                bi.push(make_pair(vertex,i));}}}
+
+
+int main() {
+cin>>n>>m;
+vector<vector<int>>arr(n);
+   vector<bool> visited(n, false);
+   stack<pair<int,int>>bi;
+
+vector<int> disc(n, INT_MAX);
+vector<int> low(n, INT_MAX);
+
+  
+
+   
+for (int i=0;i<m;i++){
+    int k,b;
+    cin>>k>>b;
+  arr[k].push_back(b);
+  arr[b].push_back(k);
+ 
+}
+
+for (int i = 0 ;i<n;i++){
+        if (!visited[i]){
+            int counts=0;
+ dfs(i, arr, disc, low, visited, -1,bi);
+   while (!bi.empty()){
+        
+        counts++;
+        bi.pop();}
+     if (counts!=0)
+    if (counts&1)odd++;
+    else even++;
+    }
+    }
+  
+   
+    cout<<odd<<" "<<even;
+    }
