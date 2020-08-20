@@ -24,12 +24,14 @@ low[vertex] = min(low[vertex], low[i]);
 if ((parent==-1 && child>1 )||(parent!=-1 && low[i]>=disc[vertex])) {
    
     while (bi.top().first!=vertex && bi.top().second!=i){
+    /*cout<<bi.top().first <<" " <<cout<<bi.top().second<<endl   (to get the components)*/
         bi.pop();
+        
     counts++;
     }
     bi.pop();
     
-     if (counts&1)odd++;
+     if (counts&1)odd++;    //to get number of odd Components and even Components;
     else even++;
 }                   
 }
