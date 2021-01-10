@@ -1,0 +1,12 @@
+int64_t power(int64_t a,int64_t b){
+        
+     int64_t result =1;
+       while(b>0){
+         if(b&1)result=result*a; //if you want you can add mod here!
+          a=a*a; //here also.
+          b>>=1;// shifted one bit similar to divide by 2 :)
+      }
+ return result;}
+//fastest way to calculate power of larger values.
+//idea :- split the binary representation of the exponents.
+// 2^10 = 2^2.2^8
