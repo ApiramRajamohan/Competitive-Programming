@@ -1,0 +1,7 @@
+We can choose N numbers from (1 to infinity) that 
+      x1 + x2 + ..... + xn = K
+      there number of ways to do this  = (N + K - 1)! / ((N-1)! * K!)
+      Why? It’s easy to prove. Consider a vector (1, 1, …, 1) consisting of (N+K-1) ones, in which we want to substitute 
+      N-1 ones for zeroes in such way that we’ll get n groups of ones (some of which may be empty)
+      and the number of ones in the ith group will be the value of xi.
+      The sum of xi will be k, because k ones are left after substitution.
