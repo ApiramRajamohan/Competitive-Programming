@@ -1,0 +1,118 @@
+Solution - My solution was pretty obvious to see, like get the values of segment tree as prefix sum at point i. Then whenever you update just directly update the minimum or 
+           maximum value. For example lets say that you have a subarray l....r when minimum contains min(at l,at l + 1,...,at r). When you are updating the segment with
+           value v, just directly update the min(l....r) to min(l....r) + v So prefix minimum won't affect by the lazy propagation or the sum.
+    
+Problem - https://www.spoj.com/problems/BRCKTS/
+
+Code - 
+/*
+*  author : Apiram                  
+*  created: 29.11.2022 00:24:29
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+struct dataa{
+	long long v = 0,maxx = 0,minn = 0,lazy =0;
+	void add(long long left,long long right,long long val){
+		v+=val;
+		lazy+=val;
+		maxx +=val;
+		minn +=val; 
+		//sum += val *(right - left + 1);
+	}
+};
+struct Segment_Tree{
+	vector<dataa>tree;
+	Segment_Tree(int n){
+		tree.resize(2 * n - 1);
+	}
+	dataa combine(dataa left,dataa right){
+		dataa res;
+		res.v = left.v + right.v;
+		res.maxx = max(left.maxx,right.maxx);
+		res.minn = min(left.minn,right.minn);
+		return res;
+	}
+	void push(long long node,long long left,long long right){
+		long long mid = (left + right)>>1;
+		long long z = node + ((mid - left + 1)<<1);
+		if (tree[node].lazy!=0){
+			tree[node + 1].add(left,mid,tree[node].lazy);
+			tree[z].add(mid + 1,right,tree[node].lazy);
+			tree[node].lazy = 0;
+		}
+	}
+	dataa query(long long node,long long left,long long right,long long qleft,long long qright){
+		if (qright<left|| qleft > right)return {0,0,0,0};
+		if (qleft<=left && qright>=right){
+			return tree[node];
+		}
+		push(node,left,right);
+		long long mid = (left + right)>>1;
+		long long z = node + ((mid - left + 1)<<1);
+		return combine(query(node + 1,left,mid,qleft,qright),query(z,mid + 1,right,qleft,qright));
+	}
+	void update(long long node,long long left,long long right,long long uleft,long long uright,long long v){
+		if (left > uright || right < uleft) return;
+		if (uleft <= left && right <=uright){
+			tree[node].add(left,right,v);
+			return;
+		}
+		push(node,left,right);
+		long long mid = (left + right)>>1;
+		long long z = node + ((mid - left + 1)<<1);
+		if (uleft<=mid){
+			update(node + 1,left,mid,uleft,uright,v);
+		}
+		if (uright > mid){
+			update(z,mid + 1,right,uleft,uright,v);
+		}
+		tree[node] = combine(tree[node + 1],tree[z]);
+	}
+};
+
+int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	int test = 10;
+	for (int t = 1;t<=test;++t){
+		cout<<"Test "<<t<<":\n";
+		int n;cin>>n;
+		string s;cin>>s;
+		Segment_Tree st(n);
+		for (int i = 0;i<n;++i){
+			if (s[i] == '('){
+				st.update(0,0,n - 1,i,n - 1,1);
+			}
+			else {
+				st.update(0,0,n - 1,i,n - 1,-1);
+			}
+		}
+		int m;cin>>m;      
+		for (int i = 0;i<m;++i){
+			int x;cin>>x;
+			if (x == 0){
+				auto v = st.query(0,0,n - 1,n - 1,n - 1);
+				auto u = st.query(0,0,n - 1,0,n - 1);
+				//cout<<v.v<<" "<<u.minn<<'\n';
+				if (v.v == 0 && u.minn >=0){
+					cout<<"YES\n";
+				}	
+				else cout<<"NO\n";
+			}
+			else{
+				--x;
+				if (s[x] == '('){
+					s[x] = ')';
+					st.update(0,0,n - 1,x,n - 1,-2);
+				}
+				else{
+					s[x] = '(';
+					st.update(0,0,n - 1,x,n - 1,2);
+				}
+			}          
+		}
+	}
+	return 0;
+}
